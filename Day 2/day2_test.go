@@ -66,6 +66,40 @@ func TestChecksum(t *testing.T) {
 	}
 }
 
+func TestSimilarStrings(t *testing.T) {
+	tables := []struct {
+		input    []string
+		similar1 string
+		similar2 string
+	}{
+		{[]string{"abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"}, "fghij", "fguij"},
+	}
+
+	for _, table := range tables {
+		similar1, similar2 := similarStrings(table.input)
+		if similar1 != table.similar1 || similar2 != table.similar2 {
+			t.Errorf("Common was incorrect got: %v, %v, want: %v, %v.", similar1, similar2, table.similar1, table.similar2)
+		}
+	}
+}
+
+func TestCommonLetters(t *testing.T) {
+	tables := []struct {
+		input1 string
+		input2 string
+		result string
+	}{
+		{"fghij", "fguij", "fgij"},
+	}
+
+	for _, table := range tables {
+		common := commonLetters(table.input1, table.input2)
+		if common != table.result {
+			t.Errorf("Common was incorrect got: %v, want: %v.", common, table.result)
+		}
+	}
+}
+
 // func TestRepeatedFrequency(t *testing.T) {
 // 	tables := []struct {
 // 		input  []string
