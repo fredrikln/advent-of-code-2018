@@ -16,13 +16,6 @@ func countOccurrences(input string) map[string]int {
 	return result
 }
 
-func showResult(input []string) {
-	for i := 0; i < len(input); i++ {
-		result := countOccurrences(input[i])
-		fmt.Println(input[i], result)
-	}
-}
-
 func contains(input map[string]int) (bool, bool) {
 	containsExacltyTwo := false
 	containsExactlyThree := false
