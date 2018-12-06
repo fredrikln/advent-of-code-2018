@@ -15,7 +15,7 @@ function react (input) {
   let oldInput
   do {
     oldInput = input
-    // console.log(input)
+
     for (var i = 0; i < pairs.length; i++) {
       input = input.replace(pairs[i], '')
     }
@@ -26,7 +26,7 @@ function react (input) {
 
 function react2 (input) {
   let shortest = input.length
-  for (var i = 0; i < pairs.length; i++) {
+  for (var i = 0; i < pairs.length; i += 2) {
     const pair = pairs[i]
 
     const inputWithout = input.replace(RegExp(`[${pair}]`, 'g'), '')
