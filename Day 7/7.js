@@ -53,4 +53,49 @@ do {
   }
 } while (added)
 
-console.log(instructions, first, string)
+// console.log(instructions, first, string)
+console.log(string)
+
+string = ''
+
+const getAvailable2 = (string) => {
+  return Object.keys(instructions).filter(key => {
+    return string.indexOf(key) === -1 &&
+      instructions[key].requirement.filter(r => string.indexOf(r) === -1).length === 0 &&
+      workers.filter(w => w.workload === key).length === 0
+  }).sort().reverse()
+}
+
+let counter = 0
+let baseSpeed = 60
+let alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+let workers = []
+let maxWorkers = 5
+
+while (true) {
+  for (let i = 0; i < workers.length; i++) {
+    const worker = workers[i]
+    if (worker.done === counter) {
+      string += worker.workload
+      workers.splice(i, 1)
+    }
+  }
+
+  for (let j = workers.length; j < maxWorkers; j++) {
+    const available = getAvailable2(string).pop()
+
+    if (available) {
+      if (workers.length < maxWorkers) {
+        workers.push({ workload: available, done: baseSpeed + counter + alphabet.indexOf(available) + 1 })
+      }
+    }
+  }
+
+  console.log(counter, workers, string)
+
+  if (workers.length === 0) {
+    break
+  }
+
+  counter++
+}
