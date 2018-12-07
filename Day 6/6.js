@@ -123,10 +123,6 @@ for (let i = minX; i < maxX; i++) {
   }
 }
 
-map = map.filter(c => !!c)
-
-console.log(map.length)
-
 file = ''
 for (let i = minX; i < maxX; i++) {
   for (let j = minY; j < maxY; j++) {
@@ -142,3 +138,7 @@ for (let i = minX; i < maxX; i++) {
 }
 
 fs.writeFileSync('output2.txt', file)
+
+map = map.filter(c => !!c)
+
+console.log(map.length)
