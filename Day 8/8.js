@@ -55,9 +55,28 @@ const sumMetadata = (node) => {
   return sum
 }
 
+const sumMetadata2 = (node) => {
+  let sum = 0
+  if (node.nodes.length === 0) {
+    sum += node.metadata.reduce((acc, metadata) => acc + metadata, 0)
+  } else {
+    for (let i = 0; i < node.metadata.length; i++) {
+      const index = node.metadata[i] - 1
+      const metaNode = node.nodes[index]
+      if (metaNode) {
+        sum += sumMetadata2(metaNode)
+      }
+    }
+  }
+
+  return sum
+}
+
 // console.log(getNextNodeLength(input), input.length)
 
 const rootNode = buildNode(input)
 const sum = sumMetadata(rootNode)
-console.log(JSON.stringify(rootNode, null, 2))
+const sum2 = sumMetadata2(rootNode)
+// console.log(JSON.stringify(rootNode, null, 2))
 console.log(sum)
+console.log(sum2)
