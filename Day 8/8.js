@@ -8,44 +8,49 @@ const buildNode = (input) => {
   const header = input.slice(0, 2)
   const countNodes = header[0]
   const countMetadata = header[1]
-  let nodeData = input.slice(2, input.length - countMetadata)
-  const metadata = input.slice(-countMetadata)
+  let data = input.slice(2)
   const nodes = []
 
-  // console.log({header, metadata, nodeData})
-
+  let totalLength = 2
   for (let i = 0; i < countNodes; i++) {
-    let nextNodeLength = getNextNodeLength(nodeData)
-    const nextNode = nodeData.slice(0, nextNodeLength)
-    nodes.push(buildNode(nextNode))
-    nodeData = nodeData.slice(nextNodeLength)
+    const [node, length] = buildNode(data)
+    nodes.push(node)
+    data = data.slice(length)
+    totalLength += length
   }
+  const metadata = data.slice(0, countMetadata)
+  totalLength += countMetadata
 
-  return {
-    header,
-    nodes,
-    metadata
-  }
+  // More data left in data, but that is not this node's data
+
+  return [
+    {
+      header,
+      nodes,
+      metadata
+    },
+    totalLength
+  ]
 }
 
-const getNextNodeLength = (input) => {
-  const header = input.slice(0, 2)
-  const countNodes = header[0]
-  const countMetadata = header[1]
-  let nodeData = input.slice(2, input.length - countMetadata)
+// const getNextNodeLength = (input) => {
+//   const header = input.slice(0, 2)
+//   const countNodes = header[0]
+//   const countMetadata = header[1]
+//   let nodeData = input.slice(2, input.length - countMetadata)
 
-  if (countNodes === 0) {
-    return 2 + countMetadata
-  } else {
-    let sum = 0
-    for (let i = 0; i < countNodes; i++) {
-      let length = getNextNodeLength(nodeData)
-      sum += length
-      nodeData = nodeData.slice(length)
-    }
-    return 2 + sum + countMetadata
-  }
-}
+//   if (countNodes === 0) {
+//     return 2 + countMetadata
+//   } else {
+//     let sum = 0
+//     for (let i = 0; i < countNodes; i++) {
+//       let length = getNextNodeLength(nodeData)
+//       sum += length
+//       nodeData = nodeData.slice(length)
+//     }
+//     return 2 + sum + countMetadata
+//   }
+// }
 
 const sumMetadata = (node) => {
   let sum = node.metadata.reduce((acc, metadata) => acc + metadata, 0)
@@ -72,11 +77,12 @@ const sumMetadata2 = (node) => {
   return sum
 }
 
-// console.log(getNextNodeLength(input), input.length)
+const [rootNode, length] = buildNode(input)
 
-const rootNode = buildNode(input)
+// console.log(JSON.stringify(rootNode, null, 2))
+console.log('Node\'s data length equals input length:', length === input.length)
+
 const sum = sumMetadata(rootNode)
 const sum2 = sumMetadata2(rootNode)
-// console.log(JSON.stringify(rootNode, null, 2))
 console.log(sum)
 console.log(sum2)
