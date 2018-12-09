@@ -1,36 +1,40 @@
 const runGame = (totalPlayers, turns) => {
-  const game = [0]
-
   let turn = 1
-  let current = 0
+  let startNode = {cw: null, ccw: null, value: 0}
+  startNode.cw = startNode
+  startNode.ccw = startNode
+
+  let current = startNode
 
   let playerScores = {}
 
   const placeMarble = (turn) => {
-    const length = game.length
-
     if (turn % 23 !== 0) {
-      const oneRight = (current + 1) % length
+      const after = current.cw
 
-      current = oneRight + 1
+      const newNode = { cw: after.cw, ccw: after, value: turn }
+      after.cw.ccw = newNode
+      after.cw = newNode
 
-      game.splice(current, 0, turn)
+      current = newNode
 
       return 0
     } else {
       if (!playerScores[turn % totalPlayers]) playerScores[turn % totalPlayers] = 0
 
-      playerScores[turn % totalPlayers] += turn
+      let nextNode = current
+      for (let i = 0; i < 7; i++) {
+        nextNode = nextNode.ccw
+      }
 
-      const sevenLeft = (current - 7 + length) % length
+      playerScores[turn % totalPlayers] += nextNode.value + turn
 
-      const sevenLeftMarble = game.splice(sevenLeft, 1)
+      nextNode.ccw.cw = nextNode.cw
+      nextNode.cw.ccw = nextNode.ccw
 
-      playerScores[turn % totalPlayers] += sevenLeftMarble[0]
+      current = nextNode.cw
 
-      current = sevenLeft
-
-      return (turn + sevenLeftMarble[0])
+      return nextNode.value + turn
     }
   }
 
@@ -39,15 +43,23 @@ const runGame = (totalPlayers, turns) => {
     // console.log(i, score)
   }
 
+  // let nextNode = startNode
+  // do {
+  //   console.log(nextNode.value)
+  //   nextNode = nextNode.cw
+  // } while (nextNode !== startNode)
+
   const highestScorePlayer = Object.keys(playerScores).sort((a, b) => playerScores[a] < playerScores[b] ? 1 : -1)[0]
   return playerScores[highestScorePlayer]
 }
 
-// console.log(runGame(10, 1618))
-// console.log(runGame(13, 7999))
-// console.log(runGame(17, 1104))
-// console.log(runGame(21, 6111))
-// console.log(runGame(30, 5807))
+// console.log(9, 25, runGame(9, 23))
+
+console.log(10, 1618, runGame(10, 1618))
+console.log(13, 7999, runGame(13, 7999))
+console.log(17, 1104, runGame(17, 1104))
+console.log(21, 6111, runGame(21, 6111))
+console.log(30, 5807, runGame(30, 5807))
 
 const fs = require('fs')
 const input = fs.readFileSync('input.txt', 'utf8').trim().split(' ')
@@ -56,6 +68,7 @@ const players = parseInt(input[0])
 
 // console.log(turns, players)
 
-console.log(runGame(players, turns))
+console.log(players, turns, runGame(players, turns))
+console.log(players, turns * 100, runGame(players, turns * 100))
 
 // console.log(game)
