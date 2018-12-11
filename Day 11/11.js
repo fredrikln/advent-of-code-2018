@@ -7,7 +7,7 @@ const cellValue = (x, y) => {
   const rackId = x + 10
   let powerLevel = (((rackId * y) + serial) * rackId)
 
-  let hundreth = parseInt(powerLevel.toString().slice(-3, -2)) || 0
+  let hundreth = Math.floor((powerLevel / 100)) % 10 // 12345 -> 123.45 -> 123 -> take away 10 until 3
 
   return hundreth - 5
 }
