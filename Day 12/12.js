@@ -47,7 +47,7 @@ const printState = (state, withVal = false) => {
     current = current.r
   }
 
-  return string
+  return string.replace(/^\.+/g, '..')
 }
 
 const createRoot = (start = 0) => {
@@ -87,7 +87,7 @@ const get2R = node => {
 const evolve = (state, rounds = 1) => {
   let root
   for (let i = 0; i < rounds; i++) {
-    if (i % 1000 == 0) console.log(i)
+    // if (i % 1000 === 0) console.log(i)
     root = createRoot(state.val)
 
     let pointer = root.r.r
@@ -104,6 +104,8 @@ const evolve = (state, rounds = 1) => {
     }
 
     state = root
+    console.log(i, printState(root))
+    console.log(countFlowers(root))
   }
 
   return root
@@ -121,6 +123,18 @@ const countFlowers = root => {
   return counter
 }
 
-const newRoot = evolve(root, 50000000000)
-console.log(printState(newRoot))
-console.log(countFlowers(newRoot))
+const newRoot = evolve(root, 200)
+const newRoot2 = evolve(root, 201)
+// const newRoot3 = evolve(root, 1000)
+// console.log(printState(newRoot))
+// console.log(countFlowers(newRoot))
+const val1 = countFlowers(newRoot)
+const val2 = countFlowers(newRoot2)
+// const val3 = countFlowers(newRoot3)
+const diff = val2 - val1
+
+const fiftybillion = val1 + ((50000000000 - 200) * diff)
+
+console.log(fiftybillion)
+
+// const fiftybil =
